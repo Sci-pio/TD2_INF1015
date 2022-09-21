@@ -54,6 +54,9 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 //TODO: Fonction qui cherche un concepteur par son nom dans une ListeJeux.
 // Cette fonction renvoie le pointeur vers le concepteur si elle le trouve dans
 // un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
+//Concepteur* chercherConcepteur() {
+//	
+//}
 
 
 Concepteur* lireConcepteur(istream& fichier)
