@@ -22,6 +22,7 @@ T lireType(istream& fichier)
 }
 #define erreurFataleAssert(message) assert(false&&(message)),terminate()
 static const uint8_t enteteTailleVariableDeBase = 0xA0;
+
 size_t lireUintTailleVariable(istream& fichier)
 {
 	uint8_t entete = lireType<uint8_t>(fichier);
@@ -41,14 +42,17 @@ string lireString(istream& fichier)
 	fichier.read((char*)&texte[0], streamsize(sizeof(texte[0])) * texte.length());
 	return texte;
 }
+
 gsl::span<Jeu*> spanListeJeux(const ListeJeux& liste)
 {
 	return gsl::span(liste.elements, liste.nElements);
 }
+
 gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 {
 	return gsl::span(liste.elements, liste.nElements);
 }
+
 #pragma endregion
 
 //TODO: Fonction qui cherche un concepteur par son nom dans une ListeJeux.
@@ -89,6 +93,22 @@ Concepteur* lireConcepteur(istream& fichier)
 // le jeu existant. De plus, en cas de saturation du tableau elements, cette
 // fonction doit doubler la taille du tableau elements de ListeJeux.
 // Utilisez la fonction pour changer la taille du tableau écrite plus haut.
+void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
+{
+	if (listeJeux.capacite - 1 <= listeJeux.nElements || listeJeux.capacite == 0)
+	{
+		size_t nouvelleCapacite = listeJeux.capacite == 0 ? listeJeux.capacite = 1 : listeJeux.capacite * 2;
+		Jeu** nouvelleListeJeu = new Jeu * [nouvelleCapacite];
+		listeJeux.elements = nouvelleListeJeu;
+		listeJeux.capacite = nouvelleCapacite;
+		///TODO MANQUE DE LA LOGIQUE POUR AUSSI COPIER LES ÉLÉMENTS ET DELETE APRES
+		//FUITEEEE
+	}
+
+	listeJeux.elements[listeJeux.nElements] = jeu;
+	listeJeux.nElements++;
+	cout << listeJeux.capacite << "  " << listeJeux.nElements << endl;
+}
 
 //TODO: Fonction qui enlève un jeu de ListeJeux.
 // Attention, ici il n'a pas de désallocation de mémoire. Elle enlève le
@@ -117,7 +137,7 @@ Jeu* lireJeu(istream& fichier)
 		lireConcepteur(fichier);  //TODO: Mettre le concepteur dans la liste des concepteur du jeu.
 		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
 	}
-	return {}; //TODO: Retourner le pointeur vers le nouveau jeu.
+	return &jeu; //TODO: Retourner le pointeur vers le nouveau jeu.
 }
 
 ListeJeux creerListeJeux(const string& nomFichier)
@@ -126,12 +146,14 @@ ListeJeux creerListeJeux(const string& nomFichier)
 	fichier.exceptions(ios::failbit);
 	size_t nElements = lireUintTailleVariable(fichier);
 	ListeJeux listeJeux = {};
+
 	for([[maybe_unused]] size_t n : iter::range(nElements))
 	{
-		lireJeu(fichier); //TODO: Ajouter le jeu à la ListeJeux.
+		Jeu* jeu = lireJeu(fichier); //TODO: Ajouter le jeu à la ListeJeux.
+		ajouterJeu(jeu,listeJeux);
 	}
 
-	return {}; //TODO: Renvoyer la ListeJeux.
+	return listeJeux; //TODO: Renvoyer la ListeJeux.
 }
 
 //TODO: Fonction pour détruire un concepteur (libération de mémoire allouée).
