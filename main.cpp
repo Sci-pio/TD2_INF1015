@@ -60,13 +60,13 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 // un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
 //Kamil: Des erreurs de type que je comprends pas trop
 Concepteur* chercherConcepteur(const string& nomConcepteur, const ListeJeux& listeJeux) {
-	for (Jeu* ptrJeu : spanListeJeux(listeJeux.elements, listeJeux.nElements)) {
+	/*for (Jeu* ptrJeu : spanListeJeux(listeJeux.elements, listeJeux.nElements)) {
 		for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs.elements, ptrJeu->concepteurs.nElements)) {
 			if (ptrConcepteur->nom == nomConcepteur) {
 				return ptrConcepteur;
 			}
 		}
-	}
+	}*/
 	return nullptr;
 }
 
@@ -107,15 +107,23 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 	{
 		size_t nouvelleCapacite = listeJeux.capacite == 0 ? listeJeux.capacite = 1 : listeJeux.capacite * 2;
 		Jeu** nouvelleListeJeu = new Jeu * [nouvelleCapacite];
+
+		//Copy des adresse des éléments de l'ancienne liste dans la nouvelle liste
+		for (size_t i = 0; i < listeJeux.nElements; i++)
+		{
+			//delete[] nouvelleListeJeu[i];
+			nouvelleListeJeu[i] = listeJeux.elements[i];
+		}
+
+		//Delete de l'anicenne espace mémoire des élements
+		delete[] listeJeux.elements;
+
 		listeJeux.elements = nouvelleListeJeu;
 		listeJeux.capacite = nouvelleCapacite;
-		///TODO MANQUE DE LA LOGIQUE POUR AUSSI COPIER LES ÉLÉMENTS ET DELETE APRES
-		//FUITEEEE
 	}
 
 	listeJeux.elements[listeJeux.nElements] = jeu;
 	listeJeux.nElements++;
-	cout << listeJeux.capacite << "  " << listeJeux.nElements << endl;
 }
 
 //TODO: Fonction qui enlève un jeu de ListeJeux.
@@ -140,14 +148,20 @@ Jeu* lireJeu(istream& fichier)
 	// que contient un jeu. Servez-vous de votre fonction d'ajout de jeu car la
 	// liste de jeux participé est une ListeJeu. Afficher un message lorsque
 	// l'allocation du jeu est réussie.
+
 	Jeu* ptrJeu = new Jeu;
+	ptrJeu->titre = jeu.titre;
+	ptrJeu->anneeSortie = jeu.anneeSortie;
+	ptrJeu->developpeur = jeu.developpeur;
+	ptrJeu->concepteurs.nElements = jeu.concepteurs.nElements;
+
 
 	cout << jeu.titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
 		lireConcepteur(fichier);  //TODO: Mettre le concepteur dans la liste des concepteur du jeu.
 		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
 	}
-	return &jeu; //TODO: Retourner le pointeur vers le nouveau jeu.
+	return ptrJeu; //TODO: Retourner le pointeur vers le nouveau jeu.
 }
 
 ListeJeux creerListeJeux(const string& nomFichier)
@@ -156,6 +170,9 @@ ListeJeux creerListeJeux(const string& nomFichier)
 	fichier.exceptions(ios::failbit);
 	size_t nElements = lireUintTailleVariable(fichier);
 	ListeJeux listeJeux = {};
+
+	cout << &listeJeux << endl;
+	cout << &listeJeux.elements[0] << endl;
 
 	for([[maybe_unused]] size_t n : iter::range(nElements))
 	{
