@@ -58,9 +58,17 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 //TODO: Fonction qui cherche un concepteur par son nom dans une ListeJeux.
 // Cette fonction renvoie le pointeur vers le concepteur si elle le trouve dans
 // un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
-//Concepteur* chercherConcepteur() {
-//	
-//}
+//Kamil: Des erreurs de type que je comprends pas trop
+Concepteur* chercherConcepteur(const string& nomConcepteur, const ListeJeux& listeJeux) {
+	for (Jeu* ptrJeu : spanListeJeux(listeJeux.elements, listeJeux.nElements)) {
+		for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs.elements, ptrJeu->concepteurs.nElements)) {
+			if (ptrConcepteur->nom == nomConcepteur) {
+				return ptrConcepteur;
+			}
+		}
+	}
+	return nullptr;
+}
 
 
 Concepteur* lireConcepteur(istream& fichier)
@@ -127,11 +135,13 @@ Jeu* lireJeu(istream& fichier)
 	// Rendu ici, les champs précédents de la structure jeu sont remplis avec la
 	// bonne information.
 
-	//TODO: Ajouter en mémoire le jeu lu. Il faut revoyer le pointeur créé.
+	//TODO: Ajouter en mémoire le jeu lu. Il faut renvoyer le pointeur créé.
 	// Attention, il faut aussi créer un tableau dynamique pour les concepteurs
 	// que contient un jeu. Servez-vous de votre fonction d'ajout de jeu car la
 	// liste de jeux participé est une ListeJeu. Afficher un message lorsque
 	// l'allocation du jeu est réussie.
+	Jeu* ptrJeu = new Jeu;
+
 	cout << jeu.titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
 		lireConcepteur(fichier);  //TODO: Mettre le concepteur dans la liste des concepteur du jeu.
