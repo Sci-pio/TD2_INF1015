@@ -222,6 +222,13 @@ void afficherConcepteur(const Concepteur& d)
 
 //TODO: Fonction pour afficher les infos d'un jeu ainsi que ses concepteurs.
 // Servez-vous de la fonction afficherConcepteur ci-dessus.
+void afficherJeu(const Jeu& jeu) {
+	cout << "\t" << jeu.titre << ", " << jeu.anneeSortie << ", " << jeu.developpeur << endl;
+	cout << "Concepteurs: ";
+	for (Concepteur* ptrConcepteur : spanListeConcepteurs(jeu.concepteurs))
+		cout << ptrConcepteur->nom << ", ";
+	cout << endl;
+}
 
 //TODO: Fonction pour afficher tous les jeux de ListeJeux, séparés par un ligne.
 // Servez-vous de la fonction d'affichage d'un jeu crée ci-dessus. Votre ligne
