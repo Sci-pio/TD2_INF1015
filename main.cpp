@@ -80,14 +80,19 @@ Concepteur* lireConcepteur(istream& fichier)
 	// Rendu ici, les champs précédents de la structure concepteur sont remplis
 	// avec la bonne information.
 
-	//TODO: Ajouter en mémoire le concepteur lu. Il faut revoyer le pointeur créé.
+	//TODO: Ajouter en mémoire le concepteur lu. Il faut renvoyer le pointeur créé.
 	// Attention, valider si le concepteur existe déjà avant de le créer, sinon
 	// on va avoir des doublons car plusieurs jeux ont des concepteurs en commun
 	// dans le fichier binaire. Pour ce faire, cette fonction aura besoin de
 	// la liste de jeux principale en paramètre.
+	// 
 	// Afficher un message lorsque l'allocation du concepteur est réussie.
-	cout << concepteur.nom << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
-	return {}; //TODO: Retourner le pointeur vers le concepteur crée.
+	Concepteur* ptrConcepteur = new Concepteur;
+	ptrConcepteur->nom = concepteur.nom;
+	ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
+	ptrConcepteur->pays = concepteur.pays;
+	cout << "L'allocation du concepteur est réussie." << endl;  
+	return ptrConcepteur; 
 }
 
 //TODO: Fonction qui change la taille du tableau de jeux de ListeJeux.
