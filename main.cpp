@@ -95,6 +95,20 @@ Concepteur* lireConcepteur(istream& fichier)
 // tableau. Il faut allouer un nouveau tableau assez grand, copier ce qu'il y
 // avait dans l'ancien, et éliminer l'ancien trop petit. N'oubliez pas, on copie
 // des pointeurs de jeux. Il n'y a donc aucune nouvelle allocation de jeu ici !
+void changerTailleListeJeux(size_t nouvelleCapacite, ListeJeux& listeJeux) {
+	//allouer nouveau tableau de capacite nouvelleCapacite
+	Jeu** nouvelleListeJeux = new Jeu * [nouvelleCapacite];
+
+	//Copie des adresse des éléments de l'ancienne liste dans la nouvelle liste
+	for (size_t i = 0; i < listeJeux.nElements; i++)
+		nouvelleListeJeux[i] = listeJeux.elements[i];
+
+	//Delete de l'ancien espace mémoire des élements
+	delete[] listeJeux.elements;
+
+	listeJeux.elements = nouvelleListeJeux;
+	listeJeux.capacite = nouvelleCapacite;
+}
 
 //TODO: Fonction pour ajouter un Jeu à ListeJeux.
 // Le jeu existant déjà en mémoire, on veut uniquement ajouter le pointeur vers
@@ -106,20 +120,7 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 	if (listeJeux.capacite - 1 <= listeJeux.nElements || listeJeux.capacite == 0)
 	{
 		size_t nouvelleCapacite = listeJeux.capacite == 0 ? listeJeux.capacite = 1 : listeJeux.capacite * 2;
-		Jeu** nouvelleListeJeu = new Jeu * [nouvelleCapacite];
-
-		//Copy des adresse des éléments de l'ancienne liste dans la nouvelle liste
-		for (size_t i = 0; i < listeJeux.nElements; i++)
-		{
-			//delete[] nouvelleListeJeu[i];
-			nouvelleListeJeu[i] = listeJeux.elements[i];
-		}
-
-		//Delete de l'anicenne espace mémoire des élements
-		delete[] listeJeux.elements;
-
-		listeJeux.elements = nouvelleListeJeu;
-		listeJeux.capacite = nouvelleCapacite;
+		changerTailleListeJeux(nouvelleCapacite, listeJeux);
 	}
 
 	listeJeux.elements[listeJeux.nElements] = jeu;
