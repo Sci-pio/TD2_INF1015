@@ -161,8 +161,6 @@ Jeu* lireJeu(istream& fichier)
 	ptrJeu->developpeur = jeu.developpeur;
 	ptrJeu->concepteurs.nElements = jeu.concepteurs.nElements;
 
-
-	cout << jeu.titre << endl;  //TODO: Enlever cet affichage temporaire servant à voir que le code fourni lit bien les jeux.
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
 		lireConcepteur(fichier);  //TODO: Mettre le concepteur dans la liste des concepteur du jeu.
 		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
@@ -177,16 +175,14 @@ ListeJeux creerListeJeux(const string& nomFichier)
 	size_t nElements = lireUintTailleVariable(fichier);
 	ListeJeux listeJeux = {};
 
-	cout << &listeJeux << endl;
-	cout << &listeJeux.elements[0] << endl;
 
 	for([[maybe_unused]] size_t n : iter::range(nElements))
 	{
-		Jeu* jeu = lireJeu(fichier); //TODO: Ajouter le jeu à la ListeJeux.
+		Jeu* jeu = lireJeu(fichier);
 		ajouterJeu(jeu,listeJeux);
 	}
 
-	return listeJeux; //TODO: Renvoyer la ListeJeux.
+	return listeJeux;
 }
 
 //TODO: Fonction pour détruire un concepteur (libération de mémoire allouée).
@@ -244,9 +240,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	bibliotheque_cours::activerCouleursAnsi(); 
 	#pragma endregion
 
-	int* fuite = new int;  // Pour vérifier que la détection de fuites fonctionne; un message devrait dire qu'il y a une fuite à cette ligne.
-
-	creerListeJeux("jeux.bin"); //TODO: Appeler correctement votre fonction de création de la liste de jeux.
+	ListeJeux listeJeux = creerListeJeux("jeux.bin"); //TODO: Appeler correctement votre fonction de création de la liste de jeux.
 
 	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 	cout << ligneSeparation << endl;
@@ -260,4 +254,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	//TODO: Faire les appels à toutes vos fonctions/méthodes pour voir qu'elles fonctionnent et avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
 
 	//TODO: Détruire tout avant de terminer le programme.  Devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
+	/*for (int i = 0; i < listeJeux.nElements; i++)
+	{
+		Jeu* jeu = listeJeux.elements[i];
+		delete jeu;
+	}
+	delete[] listeJeux.elements;*/
 }
