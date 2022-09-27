@@ -81,20 +81,19 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 	// Rendu ici, les champs précédents de la structure concepteur sont remplis
 	// avec la bonne information.
 
-	Concepteur* ptrConcepteur;
+	Concepteur* ptrConcepteur = nullptr;
+	//Concepteur* tempPtrConcepteur = nullptr;
 	bool existeDeja = false;
 
-	while (!existeDeja) {
-		for (Jeu* ptrJeu : spanListeJeux(listeJeux))
-			for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
-				if (ptrConcepteur2->nom == concepteur.nom) {
-					existeDeja = true;
-					ptrConcepteur = ptrConcepteur2;
-				}
-	}
+	
+for (Jeu* ptrJeu : spanListeJeux(listeJeux))
+	for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
+		if (ptrConcepteur2->nom == concepteur.nom) {
+			ptrConcepteur = ptrConcepteur2;
+		}
 
 	if (existeDeja == false) {
-		Concepteur* ptrConcepteur = new Concepteur;
+		ptrConcepteur = new Concepteur;
 		ptrConcepteur->nom = concepteur.nom;
 		ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
 		ptrConcepteur->pays = concepteur.pays;
@@ -141,7 +140,7 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 // jeu à être retiré par celui présent en fin de liste et décrémenter la taille
 // de celle-ci.
 
-Jeu* lireJeu(istream& fichier)
+Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
 {
 	Jeu jeu = {}; // On initialise une structure vide de type Jeu
 	jeu.titre = lireString(fichier);
@@ -159,7 +158,7 @@ Jeu* lireJeu(istream& fichier)
 	ptrJeu->concepteurs.elements = new Concepteur * [jeu.concepteurs.nElements];
 
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
-		Concepteur* ptrConcepteur = lireConcepteur(fichier);
+		Concepteur* ptrConcepteur = lireConcepteur(fichier, listeJeux);
 		ptrJeu->concepteurs.elements[i] = ptrConcepteur;
 
 		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
@@ -177,7 +176,7 @@ ListeJeux creerListeJeux(const string& nomFichier)
 
 	for ([[maybe_unused]] size_t n : iter::range(nElements))
 	{
-		Jeu* jeu = lireJeu(fichier);
+		Jeu* jeu = lireJeu(fichier, listeJeux );
 		ajouterJeu(jeu, listeJeux);
 	}
 
