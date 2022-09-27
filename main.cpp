@@ -85,12 +85,12 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 	//Concepteur* tempPtrConcepteur = nullptr;
 	bool existeDeja = false;
 
-	
-for (Jeu* ptrJeu : spanListeJeux(listeJeux))
-	for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
-		if (ptrConcepteur2->nom == concepteur.nom) {
-			ptrConcepteur = ptrConcepteur2;
-		}
+
+	for (Jeu* ptrJeu : spanListeJeux(listeJeux))
+		for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
+			if (ptrConcepteur2->nom == concepteur.nom) {
+				ptrConcepteur = ptrConcepteur2;
+			}
 
 	if (existeDeja == false) {
 		ptrConcepteur = new Concepteur;
@@ -101,7 +101,7 @@ for (Jeu* ptrJeu : spanListeJeux(listeJeux))
 
 	return ptrConcepteur;
 	cout << "L'allocation du concepteur est réussie." << endl;
-	
+
 }
 
 
@@ -139,6 +139,23 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 // Puisque l'ordre de la ListeJeux n'a pas être conservé, on peut remplacer le
 // jeu à être retiré par celui présent en fin de liste et décrémenter la taille
 // de celle-ci.
+void enleveJeuListe(Jeu* ptrJeu, ListeJeux& listeJeux)
+{
+	// LEO: Verification du fonctionnement 
+	int indexJeu = 0;
+	Jeu* ptrLastJeu = listeJeux.elements[listeJeux.nElements - 1];
+
+	for (size_t i = 0; i < listeJeux.nElements; i++)
+	{
+		if (listeJeux.elements[i] == ptrJeu)
+			indexJeu = i;
+	}
+
+	delete listeJeux.elements[indexJeu];
+
+	listeJeux.elements[indexJeu] = ptrLastJeu;
+	listeJeux.nElements--;
+}
 
 Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
 {
@@ -176,7 +193,7 @@ ListeJeux creerListeJeux(const string& nomFichier)
 
 	for ([[maybe_unused]] size_t n : iter::range(nElements))
 	{
-		Jeu* jeu = lireJeu(fichier, listeJeux );
+		Jeu* jeu = lireJeu(fichier, listeJeux);
 		ajouterJeu(jeu, listeJeux);
 	}
 
@@ -210,34 +227,27 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, const string nomConcepteur) {
 
 void afficherConcepteur(const Concepteur& d)
 {
-	cout << "\t" << d.nom << ", " << d.anneeNaissance << ", " << d.pays
-		<< endl;
+	cout << "\t" << d.nom << ", " << d.anneeNaissance << ", " << d.pays << endl;
 }
 
-//TODO: Fonction pour afficher les infos d'un jeu ainsi que ses concepteurs.
-// Servez-vous de la fonction afficherConcepteur ci-dessus.
-void afficherJeu(const Jeu* jeu) {
-	cout << jeu->titre << ", " << jeu->developpeur << ", " << jeu->anneeSortie << endl;
+void afficherJeu(const Jeu* prtJeu) {
+	cout << prtJeu->titre << ", " << prtJeu->developpeur << ", " << prtJeu->anneeSortie << endl;
 	cout << "Concepteurs: \n";
-	
-	for (int i = 0; i < jeu->concepteurs.nElements; i++)
-	{	
-		afficherConcepteur(*jeu->concepteurs.elements[i]);
+
+	for (Concepteur* ptrConcepteur : spanListeConcepteurs(prtJeu->concepteurs)) {
+		afficherConcepteur(*ptrConcepteur);
 	}
 }
 
-//TODO: Fonction pour afficher tous les jeux de ListeJeux, séparés par un ligne.
-// Servez-vous de la fonction d'affichage d'un jeu crée ci-dessus. Votre ligne
-// de séparation doit être différent de celle utilisée dans le main.
 void afficherListeJeux(const ListeJeux& listeJeux) {
-	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-	
-	for (int i = 0; i < listeJeux.nElements; i++)
-	{
-		afficherJeu(listeJeux.elements[i]);
+	static const string ligneSeparation = "\n\033[12m--------------------------------------------------\033[0m\n";
+
+	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
+		afficherJeu(ptrJeu);
 		cout << ligneSeparation;
 	}
 }
+
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {
@@ -250,12 +260,16 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
 	ListeJeux listeJeux = creerListeJeux("jeux.bin"); //TODO: Appeler correctement votre fonction de création de la liste de jeux.
 
-	
+
 	//TODO: Afficher le premier jeu de la liste (en utilisant la fonction).  Devrait être Chrono Trigger.
 	afficherListeJeux(listeJeux);
+
+	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
+	
+	cout << ligneSeparation << endl;
 	cout << "Premier jeu de la liste :" << endl;
 
-
+	cout << ligneSeparation << endl;
 	//TODO: Appel à votre fonction d'affichage de votre liste de jeux.
 
 	//TODO: Faire les appels à toutes vos fonctions/méthodes pour voir qu'elles fonctionnent et avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
