@@ -156,9 +156,12 @@ Jeu* lireJeu(istream& fichier)
 	ptrJeu->anneeSortie = jeu.anneeSortie;
 	ptrJeu->developpeur = jeu.developpeur;
 	ptrJeu->concepteurs.nElements = jeu.concepteurs.nElements;
+	ptrJeu->concepteurs.elements = new Concepteur * [jeu.concepteurs.nElements];
 
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
-		lireConcepteur(fichier);  //TODO: Mettre le concepteur dans la liste des concepteur du jeu.
+		Concepteur* ptrConcepteur = lireConcepteur(fichier);
+		ptrJeu->concepteurs.elements[i] = ptrConcepteur;
+
 		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
 	}
 	return ptrJeu;
@@ -214,18 +217,28 @@ void afficherConcepteur(const Concepteur& d)
 
 //TODO: Fonction pour afficher les infos d'un jeu ainsi que ses concepteurs.
 // Servez-vous de la fonction afficherConcepteur ci-dessus.
-void afficherJeu(const Jeu& jeu) {
-	cout << "\t" << jeu.titre << ", " << jeu.anneeSortie << ", " << jeu.developpeur << endl;
-	cout << "Concepteurs: ";
-	for (Concepteur* ptrConcepteur : spanListeConcepteurs(jeu.concepteurs))
-		cout << ptrConcepteur->nom << ", ";
-	cout << endl;
+void afficherJeu(const Jeu* jeu) {
+	cout << jeu->titre << ", " << jeu->developpeur << ", " << jeu->anneeSortie << endl;
+	cout << "Concepteurs: \n";
+	
+	for (int i = 0; i < jeu->concepteurs.nElements; i++)
+	{	
+		afficherConcepteur(*jeu->concepteurs.elements[i]);
+	}
 }
 
 //TODO: Fonction pour afficher tous les jeux de ListeJeux, séparés par un ligne.
 // Servez-vous de la fonction d'affichage d'un jeu crée ci-dessus. Votre ligne
 // de séparation doit être différent de celle utilisée dans le main.
-
+void afficherListeJeux(const ListeJeux& listeJeux) {
+	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
+	
+	for (int i = 0; i < listeJeux.nElements; i++)
+	{
+		afficherJeu(listeJeux.elements[i]);
+		cout << ligneSeparation;
+	}
+}
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {
@@ -238,12 +251,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
 	ListeJeux listeJeux = creerListeJeux("jeux.bin"); //TODO: Appeler correctement votre fonction de création de la liste de jeux.
 
-	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-	cout << ligneSeparation << endl;
-	cout << "Premier jeu de la liste :" << endl;
+	
 	//TODO: Afficher le premier jeu de la liste (en utilisant la fonction).  Devrait être Chrono Trigger.
+	afficherListeJeux(listeJeux);
+	cout << "Premier jeu de la liste :" << endl;
 
-	cout << ligneSeparation << endl;
 
 	//TODO: Appel à votre fonction d'affichage de votre liste de jeux.
 
