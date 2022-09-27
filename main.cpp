@@ -60,18 +60,19 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 // un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
 //Kamil: Des erreurs de type que je comprends pas trop
 Concepteur* chercherConcepteur(const string& nomConcepteur, const ListeJeux& listeJeux) {
-	/*for (Jeu* ptrJeu : spanListeJeux(listeJeux.elements, listeJeux.nElements)) {
-		for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs.elements, ptrJeu->concepteurs.nElements)) {
-			if (ptrConcepteur->nom == nomConcepteur) {
-				return ptrConcepteur;
+	Concepteur* ptrConcepteur = nullptr;
+	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
+		for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs)) {
+			if (ptrConcepteur2->nom == nomConcepteur) {
+				ptrConcepteur = ptrConcepteur2;
 			}
 		}
-	}*/
-	return nullptr;
+	};
+	return ptrConcepteur;
 }
 
 
-Concepteur* lireConcepteur(istream& fichier)
+Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 {
 	Concepteur concepteur = {}; // On initialise une structure vide de type Concepteur.
 	concepteur.nom = lireString(fichier);
@@ -80,19 +81,28 @@ Concepteur* lireConcepteur(istream& fichier)
 	// Rendu ici, les champs précédents de la structure concepteur sont remplis
 	// avec la bonne information.
 
-	//TODO: Ajouter en mémoire le concepteur lu. Il faut renvoyer le pointeur créé.
-	// Attention, valider si le concepteur existe déjà avant de le créer, sinon
-	// on va avoir des doublons car plusieurs jeux ont des concepteurs en commun
-	// dans le fichier binaire. Pour ce faire, cette fonction aura besoin de
-	// la liste de jeux principale en paramètre.
-	// 
-	// Afficher un message lorsque l'allocation du concepteur est réussie.
-	Concepteur* ptrConcepteur = new Concepteur;
-	ptrConcepteur->nom = concepteur.nom;
-	ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
-	ptrConcepteur->pays = concepteur.pays;
-	cout << "L'allocation du concepteur est réussie." << endl;
+	Concepteur* ptrConcepteur;
+	bool existeDeja = false;
+
+	while (!existeDeja) {
+		for (Jeu* ptrJeu : spanListeJeux(listeJeux))
+			for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
+				if (ptrConcepteur2->nom == concepteur.nom) {
+					existeDeja = true;
+					ptrConcepteur = ptrConcepteur2;
+				}
+	}
+
+	if (existeDeja == false) {
+		Concepteur* ptrConcepteur = new Concepteur;
+		ptrConcepteur->nom = concepteur.nom;
+		ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
+		ptrConcepteur->pays = concepteur.pays;
+	}
+
 	return ptrConcepteur;
+	cout << "L'allocation du concepteur est réussie." << endl;
+	
 }
 
 
