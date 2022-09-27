@@ -27,9 +27,9 @@ size_t lireUintTailleVariable(istream& fichier)
 {
 	uint8_t entete = lireType<uint8_t>(fichier);
 	switch (entete) {
-	case enteteTailleVariableDeBase+0: return lireType<uint8_t>(fichier);
-	case enteteTailleVariableDeBase+1: return lireType<uint16_t>(fichier);
-	case enteteTailleVariableDeBase+2: return lireType<uint32_t>(fichier);
+	case enteteTailleVariableDeBase + 0: return lireType<uint8_t>(fichier);
+	case enteteTailleVariableDeBase + 1: return lireType<uint16_t>(fichier);
+	case enteteTailleVariableDeBase + 2: return lireType<uint32_t>(fichier);
 	default:
 		erreurFataleAssert("Tentative de lire un entier de taille variable alors que le fichier contient autre chose à cet emplacement.");
 	}
@@ -91,15 +91,11 @@ Concepteur* lireConcepteur(istream& fichier)
 	ptrConcepteur->nom = concepteur.nom;
 	ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
 	ptrConcepteur->pays = concepteur.pays;
-	cout << "L'allocation du concepteur est réussie." << endl;  
-	return ptrConcepteur; 
+	cout << "L'allocation du concepteur est réussie." << endl;
+	return ptrConcepteur;
 }
 
-//TODO: Fonction qui change la taille du tableau de jeux de ListeJeux.
-// Cette fonction doit recevoir en paramètre la nouvelle capacité du nouveau
-// tableau. Il faut allouer un nouveau tableau assez grand, copier ce qu'il y
-// avait dans l'ancien, et éliminer l'ancien trop petit. N'oubliez pas, on copie
-// des pointeurs de jeux. Il n'y a donc aucune nouvelle allocation de jeu ici !
+
 void changerTailleListeJeux(size_t nouvelleCapacite, ListeJeux& listeJeux) {
 	//allouer nouveau tableau de capacite nouvelleCapacite
 	Jeu** nouvelleListeJeux = new Jeu * [nouvelleCapacite];
@@ -115,11 +111,7 @@ void changerTailleListeJeux(size_t nouvelleCapacite, ListeJeux& listeJeux) {
 	listeJeux.capacite = nouvelleCapacite;
 }
 
-//TODO: Fonction pour ajouter un Jeu à ListeJeux.
-// Le jeu existant déjà en mémoire, on veut uniquement ajouter le pointeur vers
-// le jeu existant. De plus, en cas de saturation du tableau elements, cette
-// fonction doit doubler la taille du tableau elements de ListeJeux.
-// Utilisez la fonction pour changer la taille du tableau écrite plus haut.
+
 void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 {
 	if (listeJeux.capacite - 1 <= listeJeux.nElements || listeJeux.capacite == 0)
@@ -149,12 +141,6 @@ Jeu* lireJeu(istream& fichier)
 	// Rendu ici, les champs précédents de la structure jeu sont remplis avec la
 	// bonne information.
 
-	//TODO: Ajouter en mémoire le jeu lu. Il faut renvoyer le pointeur créé.
-	// Attention, il faut aussi créer un tableau dynamique pour les concepteurs
-	// que contient un jeu. Servez-vous de votre fonction d'ajout de jeu car la
-	// liste de jeux participé est une ListeJeu. Afficher un message lorsque
-	// l'allocation du jeu est réussie.
-
 	Jeu* ptrJeu = new Jeu;
 	ptrJeu->titre = jeu.titre;
 	ptrJeu->anneeSortie = jeu.anneeSortie;
@@ -165,7 +151,7 @@ Jeu* lireJeu(istream& fichier)
 		lireConcepteur(fichier);  //TODO: Mettre le concepteur dans la liste des concepteur du jeu.
 		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
 	}
-	return ptrJeu; //TODO: Retourner le pointeur vers le nouveau jeu.
+	return ptrJeu;
 }
 
 ListeJeux creerListeJeux(const string& nomFichier)
@@ -176,10 +162,10 @@ ListeJeux creerListeJeux(const string& nomFichier)
 	ListeJeux listeJeux = {};
 
 
-	for([[maybe_unused]] size_t n : iter::range(nElements))
+	for ([[maybe_unused]] size_t n : iter::range(nElements))
 	{
 		Jeu* jeu = lireJeu(fichier);
-		ajouterJeu(jeu,listeJeux);
+		ajouterJeu(jeu, listeJeux);
 	}
 
 	return listeJeux;
@@ -193,7 +179,7 @@ void deleteConcepteur(Concepteur* ptrConcepteur) {
 }
 
 //TODO: Fonction qui détermine si un concepteur participe encore à un jeu.
-bool concepteurParticipeJeu(Jeu* ptrJeu,const string nomConcepteur) {
+bool concepteurParticipeJeu(Jeu* ptrJeu, const string nomConcepteur) {
 	bool concepteurParticipeJeu = true;
 	//Kamil: je vais attendre de comprendre comment les concepteurs sont enleves d'un jeu avant d'ecrire la fonction
 
@@ -213,7 +199,7 @@ bool concepteurParticipeJeu(Jeu* ptrJeu,const string nomConcepteur) {
 void afficherConcepteur(const Concepteur& d)
 {
 	cout << "\t" << d.nom << ", " << d.anneeNaissance << ", " << d.pays
-			  << endl;
+		<< endl;
 }
 
 //TODO: Fonction pour afficher les infos d'un jeu ainsi que ses concepteurs.
@@ -233,12 +219,12 @@ void afficherJeu(const Jeu& jeu) {
 
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {
-	#pragma region "Bibliothèque du cours"
+#pragma region "Bibliothèque du cours"
 	// Permet sous Windows les "ANSI escape code" pour changer de couleur
 	// https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac
 	// les supportent normalement par défaut.
-	bibliotheque_cours::activerCouleursAnsi(); 
-	#pragma endregion
+	bibliotheque_cours::activerCouleursAnsi();
+#pragma endregion
 
 	ListeJeux listeJeux = creerListeJeux("jeux.bin"); //TODO: Appeler correctement votre fonction de création de la liste de jeux.
 
@@ -250,14 +236,8 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	cout << ligneSeparation << endl;
 
 	//TODO: Appel à votre fonction d'affichage de votre liste de jeux.
-	
+
 	//TODO: Faire les appels à toutes vos fonctions/méthodes pour voir qu'elles fonctionnent et avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
 
 	//TODO: Détruire tout avant de terminer le programme.  Devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
-	/*for (int i = 0; i < listeJeux.nElements; i++)
-	{
-		Jeu* jeu = listeJeux.elements[i];
-		delete jeu;
-	}
-	delete[] listeJeux.elements;*/
 }
