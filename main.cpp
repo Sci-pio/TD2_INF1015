@@ -81,13 +81,9 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 	Concepteur* ptrConcepteur = chercherConcepteur(concepteur.nom, listeJeux);
 	
 
-	if (ptrConcepteur == nullptr) {
-		ptrConcepteur = new Concepteur;
-		ptrConcepteur->nom = concepteur.nom;
-		ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
-		ptrConcepteur->pays = concepteur.pays;
-		ptrConcepteur->jeuxConcus = ListeJeux{};
-	}
+	if (ptrConcepteur == nullptr) 
+		ptrConcepteur = new Concepteur(concepteur);
+
 
 	return ptrConcepteur;
 	cout << "L'allocation du concepteur est réussie." << endl;
@@ -177,7 +173,7 @@ ListeJeux creerListeJeux(const string& nomFichier)
 //TODO: Fonction pour détruire un concepteur (libération de mémoire allouée).
 // Lorsqu'on détruit un concepteur, on affiche son nom pour fins de débogage.
 void detruireConcepteur(Concepteur* ptrConcepteur) {
-	cout << "Le pointeur du concepteur" << ptrConcepteur->nom << "a été detruit";
+	cout << "Le pointeur du concepteur " << ptrConcepteur->nom << "a été detruit" << endl;
 	delete[] ptrConcepteur->jeuxConcus.elements;
 }
 
@@ -211,6 +207,7 @@ void detruirejeu(Jeu* ptrJeu, ListeJeux listeJeu)
 			enleveJeuListe(ptrJeu, ptrConcepteur->jeuxConcus);
 		}
 	}
+	cout << "Le pointeur du jeu " << ptrJeu->titre << " a été détruit."<< endl;
 	delete[] ptrJeu->concepteurs.elements;
 
 }
@@ -273,9 +270,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
 	cout << "Affichage de la liste de jeu:\n" << endl;
 	afficherListeJeux(listeJeux);
-
-	const int indexElem = 2;
-	enleveJeuListe(listeJeux.elements[indexElem], listeJeux);
 
 	detruireListeJeux(listeJeux);
 }
