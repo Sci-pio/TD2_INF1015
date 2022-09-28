@@ -78,27 +78,19 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 	// Rendu ici, les champs précédents de la structure concepteur sont remplis
 	// avec la bonne information.
 
-	Concepteur* ptrConcepteur = nullptr;
-	//Concepteur* tempPtrConcepteur = nullptr;
-	bool existeDeja = false;
+	Concepteur* ptrConcepteur = chercherConcepteur(concepteur.nom, listeJeux);
+	
 
-
-	for (Jeu* ptrJeu : spanListeJeux(listeJeux))
-		for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
-			if (ptrConcepteur2->nom == concepteur.nom) {
-				ptrConcepteur = ptrConcepteur2;
-			}
-
-	if (existeDeja == false) {
+	if (ptrConcepteur == nullptr) {
 		ptrConcepteur = new Concepteur;
 		ptrConcepteur->nom = concepteur.nom;
 		ptrConcepteur->anneeNaissance = concepteur.anneeNaissance;
 		ptrConcepteur->pays = concepteur.pays;
+		ptrConcepteur->jeuxConcus = ListeJeux{};
 	}
 
 	return ptrConcepteur;
 	cout << "L'allocation du concepteur est réussie." << endl;
-
 }
 
 
@@ -165,9 +157,9 @@ Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
 
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
 		Concepteur* ptrConcepteur = lireConcepteur(fichier, listeJeux);
+		
 		ptrJeu->concepteurs.elements[i] = ptrConcepteur;
-
-		//TODO: Ajouter le jeu à la liste des jeux auquel a participé le concepteur.
+		ajouterJeu(ptrJeu, ptrConcepteur->jeuxConcus);
 	}
 	return ptrJeu;
 }
@@ -227,13 +219,17 @@ void detruireListeJeux(ListeJeux& listeJeux)
 void afficherConcepteur(const Concepteur& d)
 {
 	cout << "\t" << d.nom << ", " << d.anneeNaissance << ", " << d.pays << endl;
+	//TODO REMOVE CE QUI EST EN DESSOUS
+	for (Jeu* ptrJeu : spanListeJeux(d.jeuxConcus)) {
+		cout <<"\t\t"<< ptrJeu->titre << ", " << ptrJeu->developpeur << ", " << ptrJeu->anneeSortie << endl;
+	}
 }
 
-void afficherJeu(const Jeu* prtJeu) {
-	cout << prtJeu->titre << ", " << prtJeu->developpeur << ", " << prtJeu->anneeSortie << endl;
+void afficherJeu(const Jeu* ptrJeu) {
+	cout << ptrJeu->titre << ", " << ptrJeu->developpeur << ", " << ptrJeu->anneeSortie << endl;
 	cout << "Concepteurs: \n";
 
-	for (Concepteur* ptrConcepteur : spanListeConcepteurs(prtJeu->concepteurs)) {
+	for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs)) {
 		afficherConcepteur(*ptrConcepteur);
 	}
 }
