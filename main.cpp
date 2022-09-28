@@ -140,13 +140,11 @@ void enleveJeuListe(Jeu* ptrJeu, ListeJeux& listeJeux)
 
 Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
 {
-	Jeu jeu = {}; // On initialise une structure vide de type Jeu
+	Jeu jeu = {};
 	jeu.titre = lireString(fichier);
 	jeu.anneeSortie = int(lireUintTailleVariable(fichier));
 	jeu.developpeur = lireString(fichier);
 	jeu.concepteurs.nElements = lireUintTailleVariable(fichier);
-	// Rendu ici, les champs précédents de la structure jeu sont remplis avec la
-	// bonne information.
 
 	Jeu* ptrJeu = new Jeu(jeu);
 	ptrJeu->concepteurs.elements = new Concepteur * [jeu.concepteurs.nElements];
@@ -180,7 +178,7 @@ ListeJeux creerListeJeux(const string& nomFichier)
 // Lorsqu'on détruit un concepteur, on affiche son nom pour fins de débogage.
 void detruireConcepteur(Concepteur* ptrConcepteur) {
 	cout << "Le pointeur du concepteur" << ptrConcepteur->nom << "a été detruit";
-	delete[] ptrConcepteur;
+	delete[] ptrConcepteur->jeuxConcus.elements;
 }
 
 //TODO: Fonction qui détermine si un concepteur participe encore à un jeu.
@@ -200,22 +198,20 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur) {
 // qu'un concepteur a participé (jeuxConcus). Si le concepteur n'a plus de
 // jeux présents dans sa liste de jeux participés, il faut le supprimer.  Pour
 // fins de débogage, affichez le nom du jeu lors de sa destruction.
-void detruirejeu(Jeu* ptrJeu) 
+void detruirejeu(Jeu* ptrJeu, ListeJeux listeJeu) 
 {
-	//1. Enlever le jeu a detruire des jeuxConcus de chaque concepteur qui a participe au jeu
 	for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs)) {
-		if (ptrConcepteur->jeuxConcus.nElements > 0) {
-			for (Jeu* ptrJeuConcus : spanListeJeux(ptrConcepteur->jeuxConcus))
-				if (ptrJeuConcus->titre == ptrJeu->titre) {
-					enleveJeuListe(ptrJeu, ptrConcepteur->jeuxConcus);
-					delete[] ptrJeu;
-				}
+		if (ptrConcepteur->jeuxConcus.nElements == 1)
+		{
+			detruireConcepteur(ptrConcepteur);
+			delete ptrConcepteur;
 		}
 		else
-			detruireConcepteur(ptrConcepteur);
+		{
+			enleveJeuListe(ptrJeu, ptrConcepteur->jeuxConcus);
+		}
 	}
-		
-	//2. 
+	delete[] ptrJeu->concepteurs.elements;
 
 }
 
@@ -223,7 +219,8 @@ void detruirejeu(Jeu* ptrJeu)
 void detruireListeJeux(ListeJeux& listeJeux) 
 {
 	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
-		detruirejeu(ptrJeu);
+		detruirejeu(ptrJeu, listeJeux);
+		delete ptrJeu;
 	}
 	delete[] listeJeux.elements;
 }
