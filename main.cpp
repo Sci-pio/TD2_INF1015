@@ -269,22 +269,20 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	bibliotheque_cours::activerCouleursAnsi();
 #pragma endregion
 
-	ListeJeux listeJeux = creerListeJeux("jeux.bin"); //TODO: Appeler correctement votre fonction de création de la liste de jeux.
-
-
-	//TODO: Afficher le premier jeu de la liste (en utilisant la fonction).  Devrait être Chrono Trigger.
-	afficherListeJeux(listeJeux);
-	
-
 	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-	
-	cout << ligneSeparation << endl;
+	ListeJeux listeJeux = creerListeJeux("jeux.bin");
+
+	cout << ligneSeparation;
 	cout << "Premier jeu de la liste :" << endl;
-
+	afficherJeu(listeJeux.elements[0]);
 	cout << ligneSeparation << endl;
-	//TODO: Appel à votre fonction d'affichage de votre liste de jeux.
 
-	//TODO: Faire les appels à toutes vos fonctions/méthodes pour voir qu'elles fonctionnent et avoir 0% de lignes non exécutées dans le programme (aucune ligne rouge dans la couverture de code; c'est normal que les lignes de "new" et "delete" soient jaunes).  Vous avez aussi le droit d'effacer les lignes du programmes qui ne sont pas exécutée, si finalement vous pensez qu'elle ne sont pas utiles.
 
-	//TODO: Détruire tout avant de terminer le programme.  Devrait afficher "Aucune fuite detectee." a la sortie du programme; il affichera "Fuite detectee:" avec la liste des blocs, s'il manque des delete.
+	cout << "Affichage de la liste de jeu:\n" << endl;
+	afficherListeJeux(listeJeux);
+
+	const int indexElem = 2;
+	enleveJeuListe(listeJeux.elements[indexElem], listeJeux);
+
+	detruireListeJeux(listeJeux);
 }
