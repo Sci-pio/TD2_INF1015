@@ -148,11 +148,7 @@ Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
 	// Rendu ici, les champs précédents de la structure jeu sont remplis avec la
 	// bonne information.
 
-	Jeu* ptrJeu = new Jeu;
-	ptrJeu->titre = jeu.titre;
-	ptrJeu->anneeSortie = jeu.anneeSortie;
-	ptrJeu->developpeur = jeu.developpeur;
-	ptrJeu->concepteurs.nElements = jeu.concepteurs.nElements;
+	Jeu* ptrJeu = new Jeu(jeu);
 	ptrJeu->concepteurs.elements = new Concepteur * [jeu.concepteurs.nElements];
 
 	for ([[maybe_unused]] size_t i : iter::range(jeu.concepteurs.nElements)) {
