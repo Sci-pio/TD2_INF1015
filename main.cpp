@@ -200,9 +200,23 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur) {
 // qu'un concepteur a participé (jeuxConcus). Si le concepteur n'a plus de
 // jeux présents dans sa liste de jeux participés, il faut le supprimer.  Pour
 // fins de débogage, affichez le nom du jeu lors de sa destruction.
-void detruirejeu(Jeu* jeu) 
+void detruirejeu(Jeu* ptrJeu) 
 {
-	
+	//1. Enlever le jeu a detruire des jeuxConcus de chaque concepteur qui a participe au jeu
+	for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs)) {
+		if (ptrConcepteur->jeuxConcus.nElements > 0) {
+			for (Jeu* ptrJeuConcus : spanListeJeux(ptrConcepteur->jeuxConcus))
+				if (ptrJeuConcus->titre == ptrJeu->titre) {
+					enleveJeuListe(ptrJeu, ptrConcepteur->jeuxConcus);
+					delete[] ptrJeu;
+				}
+		}
+		else
+			detruireConcepteur(ptrConcepteur);
+	}
+		
+	//2. 
+
 }
 
 //TODO: Fonction pour détruire une ListeJeux et tous ses jeux.
