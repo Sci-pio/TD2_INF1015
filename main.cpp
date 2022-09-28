@@ -59,9 +59,9 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 Concepteur* chercherConcepteur(const string& nomConcepteur, const ListeJeux& listeJeux) {
 	Concepteur* ptrConcepteur = nullptr;
 	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
-		for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs)) {
-			if (ptrConcepteur2->nom == nomConcepteur) {
-				ptrConcepteur = ptrConcepteur2;
+		for (Concepteur* tempPtrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs)) {
+			if (tempPtrConcepteur->nom == nomConcepteur) {
+				ptrConcepteur = tempPtrConcepteur;
 			}
 		}
 	};
@@ -179,12 +179,12 @@ void detruireConcepteur(Concepteur* ptrConcepteur) {
 
 //TODO: Fonction qui détermine si un concepteur participe encore à un jeu.
 bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur) {
-	bool concepteurParticipeJeu = false;
-	for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
-		if (ptrConcepteur2->nom == ptrConcepteur->nom)
-			concepteurParticipeJeu = true;
+	bool participeJeu = false;
+	for (Concepteur* tempPtrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs))
+		if (tempPtrConcepteur == ptrConcepteur)
+			participeJeu = true;
 
-	return concepteurParticipeJeu;
+	return participeJeu;
 }
 
 //TODO: Fonction pour détruire un jeu (libération de mémoire allouée).
@@ -194,10 +194,10 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur) {
 // qu'un concepteur a participé (jeuxConcus). Si le concepteur n'a plus de
 // jeux présents dans sa liste de jeux participés, il faut le supprimer.  Pour
 // fins de débogage, affichez le nom du jeu lors de sa destruction.
-void detruirejeu(Jeu* ptrJeu, ListeJeux listeJeu) 
+void detruirejeu(Jeu* ptrJeu, ListeJeux& listeJeu) 
 {
 	for (Concepteur* ptrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs)) {
-		if (ptrConcepteur->jeuxConcus.nElements == 1)
+		if (ptrConcepteur->jeuxConcus.nElements <= 1)
 		{
 			detruireConcepteur(ptrConcepteur);
 			delete ptrConcepteur;
