@@ -190,15 +190,17 @@ ListeJeux creerListeJeux(const string& nomFichier)
 
 //TODO: Fonction pour détruire un concepteur (libération de mémoire allouée).
 // Lorsqu'on détruit un concepteur, on affiche son nom pour fins de débogage.
-void deleteConcepteur(Concepteur* ptrConcepteur) {
-	cout << "Le pointeur du Concepteur" << ptrConcepteur->nom << "a ete detruit";
+void detruireConcepteur(Concepteur* ptrConcepteur) {
+	cout << "Le pointeur du concepteur" << ptrConcepteur->nom << "a été detruit";
 	delete[] ptrConcepteur;
 }
 
 //TODO: Fonction qui détermine si un concepteur participe encore à un jeu.
-bool concepteurParticipeJeu(Jeu* ptrJeu, const string nomConcepteur) {
-	bool concepteurParticipeJeu = true;
-	//Kamil: je vais attendre de comprendre comment les concepteurs sont enleves d'un jeu avant d'ecrire la fonction
+bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur) {
+	bool concepteurParticipeJeu = false;
+	for (Concepteur* ptrConcepteur2 : spanListeConcepteurs(ptrJeu->concepteurs))
+		if (ptrConcepteur2->nom == ptrConcepteur->nom)
+			concepteurParticipeJeu = true;
 
 	return concepteurParticipeJeu;
 }
@@ -212,7 +214,7 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, const string nomConcepteur) {
 // fins de débogage, affichez le nom du jeu lors de sa destruction.
 void detruirejeu(Jeu* jeu) 
 {
-
+	
 }
 
 //TODO: Fonction pour détruire une ListeJeux et tous ses jeux.
