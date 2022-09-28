@@ -133,28 +133,23 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 	listeJeux.nElements++;
 }
 
-//TODO: Fonction qui enlève un jeu de ListeJeux.
-// Attention, ici il n'a pas de désallocation de mémoire. Elle enlève le
-// pointeur de la ListeJeux, mais le jeu pointé existe encore en mémoire.
-// Puisque l'ordre de la ListeJeux n'a pas être conservé, on peut remplacer le
-// jeu à être retiré par celui présent en fin de liste et décrémenter la taille
-// de celle-ci.
+
 void enleveJeuListe(Jeu* ptrJeu, ListeJeux& listeJeux)
 {
-	// LEO: Verification du fonctionnement 
-	int indexJeu = 0;
-	Jeu* ptrLastJeu = listeJeux.elements[listeJeux.nElements - 1];
+	int indexJeu = -1;
+	int nElements = listeJeux.nElements;
 
-	for (size_t i = 0; i < listeJeux.nElements; i++)
-	{
+	for (size_t i = 0; i < nElements; i++) {
 		if (listeJeux.elements[i] == ptrJeu)
 			indexJeu = i;
 	}
 
-	delete listeJeux.elements[indexJeu];
-
-	listeJeux.elements[indexJeu] = ptrLastJeu;
-	listeJeux.nElements--;
+	if (indexJeu != -1 && nElements >= 0) {
+		Jeu* ptrLastJeu = listeJeux.elements[nElements - 1];
+		listeJeux.elements[indexJeu] = ptrLastJeu;
+		listeJeux.elements[nElements - 1] = nullptr;
+		listeJeux.nElements--;
+	}
 }
 
 Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
@@ -222,8 +217,19 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, const string nomConcepteur) {
 // qu'un concepteur a participé (jeuxConcus). Si le concepteur n'a plus de
 // jeux présents dans sa liste de jeux participés, il faut le supprimer.  Pour
 // fins de débogage, affichez le nom du jeu lors de sa destruction.
+void detruirejeu(Jeu* jeu) 
+{
+
+}
 
 //TODO: Fonction pour détruire une ListeJeux et tous ses jeux.
+void detruireListeJeux(ListeJeux& listeJeux) 
+{
+	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
+		detruirejeu(ptrJeu);
+	}
+	delete[] listeJeux.elements;
+}
 
 void afficherConcepteur(const Concepteur& d)
 {
@@ -263,6 +269,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
 	//TODO: Afficher le premier jeu de la liste (en utilisant la fonction).  Devrait être Chrono Trigger.
 	afficherListeJeux(listeJeux);
+	
 
 	static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
 	
