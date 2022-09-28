@@ -55,10 +55,7 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 
 #pragma endregion
 
-//TODO: Fonction qui cherche un concepteur par son nom dans une ListeJeux.
-// Cette fonction renvoie le pointeur vers le concepteur si elle le trouve dans
-// un des jeux de la ListeJeux. En cas contraire, elle renvoie un pointeur nul.
-//Kamil: Des erreurs de type que je comprends pas trop
+
 Concepteur* chercherConcepteur(const string& nomConcepteur, const ListeJeux& listeJeux) {
 	Concepteur* ptrConcepteur = nullptr;
 	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
@@ -106,14 +103,11 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 
 
 void changerTailleListeJeux(size_t nouvelleCapacite, ListeJeux& listeJeux) {
-	//allouer nouveau tableau de capacite nouvelleCapacite
 	Jeu** nouvelleListeJeux = new Jeu * [nouvelleCapacite];
 
-	//Copie des adresse des éléments de l'ancienne liste dans la nouvelle liste
 	for (size_t i = 0; i < listeJeux.nElements; i++)
 		nouvelleListeJeux[i] = listeJeux.elements[i];
 
-	//Delete de l'ancien espace mémoire des élements
 	delete[] listeJeux.elements;
 
 	listeJeux.elements = nouvelleListeJeux;
@@ -184,7 +178,6 @@ ListeJeux creerListeJeux(const string& nomFichier)
 	fichier.exceptions(ios::failbit);
 	size_t nElements = lireUintTailleVariable(fichier);
 	ListeJeux listeJeux = {};
-
 
 	for ([[maybe_unused]] size_t n : iter::range(nElements))
 	{
