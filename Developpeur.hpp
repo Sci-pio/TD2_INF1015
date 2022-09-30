@@ -1,7 +1,11 @@
 ﻿#pragma once
-#include <string>
 #include "ListeJeux.hpp"
-#include "main.cpp" //Kamil: Je fais include le main pour avoir acces a la fonction spanListeJeux()
+#include "gsl/span"
+#include "Jeu.hpp"
+#include <iostream>
+
+using namespace std;
+using namespace gsl;
 
 class Developpeur
 {
@@ -10,7 +14,7 @@ class Developpeur
 	//TODO: Les méthodes à faire...
 	
 public:
-	Developpeur(const std:: string& nom, const ListeJeux& listeJeuxDeveloppes);
+	Developpeur(const string& nom);
 	const std::string& obtenirNom() const;
 	int compterNbJeux(const ListeJeux& listeJeux) const;
 	void mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux);
@@ -21,10 +25,10 @@ private:
 };
 
 //Kamil: Constructeur par defaut
-Developpeur::Developpeur(const std::string& nom, const ListeJeux& listeJeuxDeveloppes)
+Developpeur::Developpeur(const string& nom = "")
 {
 	paireNomJeux_.first = nom; 
-	paireNomJeux_.second = listeJeuxDeveloppes; //Kamil: il faut initialiser la listeJeux de sorte qu'elle soit vide mais je suis un peu melange de cmt faire ca
+	paireNomJeux_.second = {}; //Kamil: il faut initialiser la listeJeux de sorte qu'elle soit vide mais je suis un peu melange de cmt faire ca
 }
 
 //Kamil: Fonction pour obtenir le nom du developpeur
@@ -37,8 +41,8 @@ const std:: string& Developpeur:: obtenirNom() const
 int Developpeur::compterNbJeux(const ListeJeux& listeJeux) const
 {
 	int nbJeux = 0;
-	for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
-		if (ptrJeu->developpeur == this->obtenirNom())
+	for (Jeu* ptrJeu : span(listeJeux.elements, listeJeux.nElements)) {
+		if (ptrJeu->developpeur == obtenirNom())
 			nbJeux++;
 	}
 	return nbJeux;
@@ -47,19 +51,27 @@ int Developpeur::compterNbJeux(const ListeJeux& listeJeux) const
 //Kamil: Fonction pour mettre a jour la liste de jeux developpes par un developpeur a partir de la liste de jeux de tous les jeux
 void Developpeur::mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux)
 {
-	int tailleListeJeux = this->compterNbJeux(listeTousLesJeux);
-	while (listeTousLesJeux.nElements <= tailleListeJeux) {
-		for (Jeu* ptrJeu : spanListeJeux(listeTousLesJeux))
-			if (ptrJeu->developpeur == this->obtenirNom())
-				ajouterJeu(ptrJeu, paireNomJeux_.second);
-	}
+	int tailleListeJeux = compterNbJeux(listeTousLesJeux);
+	int index = 0;
 
+	delete[] paireNomJeux_.second.elements;
+	paireNomJeux_.second.elements = new Jeu * [tailleListeJeux];
+
+	for (Jeu* ptrJeu : span(listeTousLesJeux.elements, listeTousLesJeux.nElements))
+		if (ptrJeu->developpeur == obtenirNom()) {
+			paireNomJeux_.second.elements[index++] = ptrJeu; // Leo: Warining pcq le compilateur a peur que l'index depasse la taille du tableau, mais normalement ca devrait etre correct (compterNbJeux)
+		}
 }
 
 //Kamil: Fonction pour afficher les titres de tous les jeux developpes par un developpeur
 void Developpeur::afficherJeuxDeveloppes()
 {
 	cout << "Les jeux développés par " << this->paireNomJeux_.first << "sont: ";
-	for (Jeu* ptrJeu : spanListeJeux(paireNomJeux_.second))
+	for (Jeu* ptrJeu : span(paireNomJeux_.second.elements, paireNomJeux_.second.nElements))
 		cout << ptrJeu->titre << endl;
+}
+
+Developpeur::~Developpeur()
+{
+	delete[] paireNomJeux_.second.elements;
 }
