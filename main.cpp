@@ -127,8 +127,8 @@ void enleveJeuListe(Jeu* ptrJeu, ListeJeux& listeJeux)
 	}
 
 	if (indexJeu != -1 && nElements >= 0) {
-		Jeu* ptrLastJeu = listeJeux.elements[nElements - 1];
-		listeJeux.elements[indexJeu] = ptrLastJeu;
+		Jeu* ptrDernierJeu = listeJeux.elements[nElements - 1];
+		listeJeux.elements[indexJeu] = ptrDernierJeu;
 		listeJeux.elements[nElements - 1] = nullptr;
 		listeJeux.nElements--;
 	}
