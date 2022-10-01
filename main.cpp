@@ -279,6 +279,13 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
 	// Tests sur les methodes des classes Developpeur et ListeDeveloppeurs
 	Developpeur dev;
-	cout << "aaaaaaaaaaaa" << dev.obtenirNom() << "aaaaaaaaaaa";
+	cout << dev.obtenirNom() << endl;
+	
+	Developpeur square("Square");
+	cout << square.obtenirNom() << endl;
+	cout << square.compterNbJeux(listeJeux);
+	square.mettreDeveloppeurAJour(listeJeux);
+	square.afficherJeuxDeveloppes();
+
 
 }

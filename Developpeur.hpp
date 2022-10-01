@@ -17,6 +17,7 @@ class Developpeur
 	
 public:
 	Developpeur();
+	Developpeur(const string& nom);
 	const string& obtenirNom() const;
 	int compterNbJeux(const ListeJeux& listeJeux) const;
 	void mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux);
@@ -32,7 +33,14 @@ private:
 // Constructeur par defaut
 Developpeur::Developpeur()
 {
-	paireNomJeux_.first = "Nom";
+	paireNomJeux_.first = "Pas de nom";
+	paireNomJeux_.second = {};
+}
+
+// Constructeur
+Developpeur::Developpeur(const string& nom)
+{
+	paireNomJeux_.first = nom;
 	paireNomJeux_.second = {};
 }
 
@@ -47,7 +55,7 @@ int Developpeur::compterNbJeux(const ListeJeux& listeJeux) const
 {
 	int nbJeux = 0;
 	for (Jeu* ptrJeu : span(listeJeux.elements, listeJeux.nElements)) {
-		if (ptrJeu->developpeur == obtenirNom())
+		if (ptrJeu->developpeur == this->obtenirNom())
 			nbJeux++;
 	}
 	return nbJeux;
