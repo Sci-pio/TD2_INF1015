@@ -11,7 +11,7 @@ class ListeDeveloppeurs
 public:
 	ListeDeveloppeurs();
 	void afficher() const;
-	void ajouterDeveloppeur(Developpeur& developpeur);
+	void ajouterDeveloppeur(Developpeur* developpeur);
 	void retirerDeveloppeur(Developpeur& developpeur);
 
 private:
@@ -31,9 +31,26 @@ void ListeDeveloppeurs::afficher() const
 
 }
 
-void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur& developpeur)
+void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur* prtDeveloppeur)
 {
+	if (capacite_ - 1 <= nElements_ || capacite_ == 0)
+	{
+		size_t nouvelleCapacite = capacite_ == 0 ? capacite_ = 1 : capacite_ * 2;
+		Developpeur** nouvelleListeJeux = new Developpeur * [nouvelleCapacite];
 
+		for (size_t i = 0; i < nElements_; i++)
+			nouvelleListeJeux[i] = elements_[i];
+
+		delete[] elements_;
+
+		elements_ = nouvelleListeJeux;
+		capacite_ = nouvelleCapacite;
+	}
+
+	elements_[nElements_] = prtDeveloppeur;
+	nElements_++;
+
+	
 }
 
 void ListeDeveloppeurs::retirerDeveloppeur(Developpeur& developpeur)
