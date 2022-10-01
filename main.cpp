@@ -7,6 +7,9 @@
 #include "bibliotheque_cours.hpp"
 #include "verification_allocation.hpp"
 #include "debogage_memoire.hpp"  //NOTE: Incompatible avec le "placement new", ne pas utiliser cette entête si vous utilisez ce type de "new" dans les lignes qui suivent cette inclusion.
+#include "Developpeur.hpp"
+#include "ListeDeveloppeurs.hpp"
+
 
 using namespace std;
 using namespace iter;
@@ -272,4 +275,10 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 	afficherListeJeux(listeJeux);
 
 	detruireListeJeux(listeJeux);
+
+
+	// Tests sur les methodes des classes Developpeur et ListeDeveloppeurs
+	Developpeur dev;
+	cout << "aaaaaaaaaaaa" << dev.obtenirNom() << "aaaaaaaaaaa";
+
 }

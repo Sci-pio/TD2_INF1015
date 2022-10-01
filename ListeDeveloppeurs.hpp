@@ -3,6 +3,9 @@
 #include "Developpeur.hpp"
 #include "gsl/span"
 
+using namespace gsl;
+using namespace std;
+
 class ListeDeveloppeurs
 {
 	//TODO: En faire une classe qui suit les principes OO.
@@ -13,6 +16,7 @@ public:
 	void afficher() const;
 	void ajouterDeveloppeur(Developpeur* ptrDeveloppeur);
 	void retirerDeveloppeur(Developpeur* ptrDeveloppeur);
+	~ListeDeveloppeurs();
 
 private:
 	std::size_t nElements_, capacite_;
@@ -21,7 +25,7 @@ private:
 
 
 //Constructeur par defaut
-ListeDeveloppeurs::ListeDeveloppeurs() 
+ListeDeveloppeurs::ListeDeveloppeurs()
 {
 	elements_ = {};
 	nElements_ = 0; capacite_ = 0;
@@ -35,7 +39,7 @@ void ListeDeveloppeurs::afficher() const
 }
 
 
-void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur* ptrDeveloppeur)
+void ListeDeveloppeurs::ajouterDeveloppeur(Developpeur* ptrDeveloppeur)
 {
 	if (capacite_ - 1 <= nElements_ || capacite_ == 0)
 	{
@@ -50,11 +54,8 @@ void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur* ptrDeveloppeur)
 		elements_ = nouvelleListeJeux;
 		capacite_ = nouvelleCapacite;
 	}
-
 	elements_[nElements_] = ptrDeveloppeur;
 	nElements_++;
-
-	
 }
 
 

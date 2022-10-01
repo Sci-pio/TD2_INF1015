@@ -1,12 +1,13 @@
 ﻿#pragma once
 #include "ListeJeux.hpp"
 #include <string>
-#include "gsl/span"
 #include "Jeu.hpp"
+#include "Developpeur.hpp"
+#include "gsl/span"
 #include <iostream>
-
 using namespace std;
 using namespace gsl;
+
 
 class Developpeur
 {
@@ -15,25 +16,28 @@ class Developpeur
 	//TODO: Les méthodes à faire...
 	
 public:
-	Developpeur(const string& nom);
+	Developpeur();
 	const string& obtenirNom() const;
 	int compterNbJeux(const ListeJeux& listeJeux) const;
 	void mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux);
 	void afficherJeuxDeveloppes();
+	~Developpeur();
 
 private:
 	std::pair<std::string, ListeJeux> paireNomJeux_;
 };
 
+
+
 // Constructeur par defaut
-Developpeur::Developpeur(const string& nom = "")
+Developpeur::Developpeur()
 {
-	paireNomJeux_.first = nom; 
-	paireNomJeux_.second = {}; 
+	paireNomJeux_.first = "Nom";
+	paireNomJeux_.second = {};
 }
 
 // Fonction pour obtenir le nom du developpeur
-const string& Developpeur:: obtenirNom() const
+const string& Developpeur::obtenirNom() const
 {
 	return paireNomJeux_.first;
 }
