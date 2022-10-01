@@ -1,39 +1,19 @@
-﻿#pragma once
-#include "ListeJeux.hpp"
-#include <string>
+#include "Developpeur.hpp"
 #include "gsl/span"
-#include "Jeu.hpp"
 #include <iostream>
-
-using namespace std;
+using namespace gsl;
 using namespace gsl;
 
-class Developpeur
-{
-	//TODO: En faire une classe qui suit les principes OO.
-	//TODO: La destruction d'un Developpeur doit s'assurer que la désallocation de ListeJeux est faite.
-	//TODO: Les méthodes à faire...
-	
-public:
-	Developpeur(const string& nom);
-	const string& obtenirNom() const;
-	int compterNbJeux(const ListeJeux& listeJeux) const;
-	void mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux);
-	void afficherJeuxDeveloppes();
-
-private:
-	std::pair<std::string, ListeJeux> paireNomJeux_;
-};
 
 // Constructeur par defaut
 Developpeur::Developpeur(const string& nom = "")
 {
-	paireNomJeux_.first = nom; 
-	paireNomJeux_.second = {}; 
+	paireNomJeux_.first = nom;
+	paireNomJeux_.second = {};
 }
 
 // Fonction pour obtenir le nom du developpeur
-const string& Developpeur:: obtenirNom() const
+const string& Developpeur::obtenirNom() const
 {
 	return paireNomJeux_.first;
 }
@@ -67,7 +47,7 @@ void Developpeur::mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux)
 // Fonction pour afficher les titres de tous les jeux developpes par un developpeur
 void Developpeur::afficherJeuxDeveloppes()
 {
-	cout << "Les jeux développés par " << paireNomJeux_.first << "sont: " << endl;
+	cout << "Les jeux d�velopp�s par " << paireNomJeux_.first << "sont: " << endl;
 	for (Jeu* ptrJeu : span(paireNomJeux_.second.elements, paireNomJeux_.second.nElements))
 		cout << ptrJeu->titre << endl;
 }
