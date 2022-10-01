@@ -11,13 +11,14 @@ class ListeDeveloppeurs
 public:
 	ListeDeveloppeurs();
 	void afficher() const;
-	void ajouterDeveloppeur(Developpeur* developpeur);
-	void retirerDeveloppeur(Developpeur& developpeur);
+	void ajouterDeveloppeur(Developpeur* ptrDeveloppeur);
+	void retirerDeveloppeur(Developpeur* ptrDeveloppeur);
 
 private:
 	std::size_t nElements_, capacite_;
 	Developpeur** elements_;
 };
+
 
 //Constructeur par defaut
 ListeDeveloppeurs::ListeDeveloppeurs() 
@@ -26,12 +27,15 @@ ListeDeveloppeurs::ListeDeveloppeurs()
 	nElements_ = 0; capacite_ = 0;
 }
 
+
 void ListeDeveloppeurs::afficher() const
 {
-
+	for (Developpeur* developpeur : span(elements_, nElements_))
+		developpeur->afficherJeuxDeveloppes();
 }
 
-void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur* prtDeveloppeur)
+
+void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur* ptrDeveloppeur)
 {
 	if (capacite_ - 1 <= nElements_ || capacite_ == 0)
 	{
@@ -47,16 +51,30 @@ void ListeDeveloppeurs:: ajouterDeveloppeur(Developpeur* prtDeveloppeur)
 		capacite_ = nouvelleCapacite;
 	}
 
-	elements_[nElements_] = prtDeveloppeur;
+	elements_[nElements_] = ptrDeveloppeur;
 	nElements_++;
 
 	
 }
 
-void ListeDeveloppeurs::retirerDeveloppeur(Developpeur& developpeur)
-{
 
+void ListeDeveloppeurs::retirerDeveloppeur(Developpeur* ptrDeveloppeur)
+{
+	int indexDeveloppeur = -1;
+
+	for (size_t i = 0; i < nElements_; i++) {
+		if (elements_[i] == ptrDeveloppeur)
+			indexDeveloppeur = i;
+	}
+
+	if (indexDeveloppeur != -1 && nElements_ >= 0) {
+		Developpeur* ptrDernierDeveloppeur = elements_[nElements_ - 1];
+		elements_[indexDeveloppeur] = ptrDernierDeveloppeur;
+		elements_[nElements_ - 1] = nullptr;
+		nElements_--;
+	}
 }
+
 
 // Destructeur
 ListeDeveloppeurs:: ~ListeDeveloppeurs()
