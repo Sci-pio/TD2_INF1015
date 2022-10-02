@@ -289,11 +289,11 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
      //detruireListeJeux(listeJeux);
 
-     //Tests sur les methodes des classes Developpeur et ListeDeveloppeurs
+     //Tests sur les methodes de la classe Developpeur
     ListeJeux listeJeuxTests = creerListeJeux("jeux.bin");
 
     cout << ligneSeparation;
-    cout << "Voici les tests des methodes des classes Developpeur et ListeDeveloppeurs: " << endl;
+    cout << "Voici les tests des methodes de la classe Developpeur: " << endl;
     Developpeur dev;
     cout << dev.obtenirNom() << endl;
 
@@ -301,7 +301,18 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     cout << square.obtenirNom() << endl;
     cout << square.compterNbJeux(listeJeuxTests) << endl; // Square a developpe 3 jeux
     square.mettreDeveloppeurAJour(listeJeuxTests);
-    square.afficherJeuxDeveloppes();
+    square.afficherJeuxDeveloppes(); // Les jeux developpes par Square sont Chrono Trigger, Final Fantasy VI et Secret of Mana
+
+    Developpeur nintendo("Nintendo");
+
+    //Tests sur les methodes de la classe ListeDeveloppeurs
+    cout << ligneSeparation;
+    cout << "Voici les tests des methodes de la classe ListeDeveloppeurs: " << endl;
+    ListeDeveloppeurs listeDev;
+    listeDev.afficher(); //N'affiche rien
+    listeDev.ajouterDeveloppeur(&square);
+    listeDev.ajouterDeveloppeur(&nintendo);
+    listeDev.afficher();
 
     detruireListeJeux(listeJeuxTests);
 }
