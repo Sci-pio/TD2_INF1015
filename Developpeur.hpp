@@ -22,7 +22,6 @@ public:
 	int compterNbJeux(const ListeJeux& listeJeux) const;
 	void mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux);
 	void afficherJeuxDeveloppes();
-	void test();
 	~Developpeur();
 
 private:
@@ -70,21 +69,16 @@ void Developpeur::mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux)
 
 	delete[] paireNomJeux_.second.elements;
 	paireNomJeux_.second.elements = new Jeu*[tailleListeJeux];
+	paireNomJeux_.second.capacite = tailleListeJeux;
 
 	for (Jeu* ptrJeu : span(listeTousLesJeux.elements, listeTousLesJeux.nElements))
 		if (ptrJeu->developpeur == obtenirNom()) {
 			paireNomJeux_.second.elements[index] = ptrJeu; // Leo: Warning pcq le compilateur a peur que l'index depasse la taille du tableau, mais normalement ca devrait etre correct (compterNbJeux)
 			index++;
+			paireNomJeux_.second.nElements++;
 		}
 }
 
-//Kamil: fonction bidon temporaire
-void Developpeur::test()
-{
-	cout << paireNomJeux_.second.elements[0]->titre << endl;
-	cout << paireNomJeux_.second.elements[1]->titre << endl;
-	cout << paireNomJeux_.second.elements[2]->titre << endl;
-}
 
 // Fonction pour afficher les titres de tous les jeux developpes par un developpeur
 void Developpeur::afficherJeuxDeveloppes()
@@ -92,7 +86,7 @@ void Developpeur::afficherJeuxDeveloppes()
 	cout << "Les jeux développés par " << paireNomJeux_.first << " sont: " << endl;
 
 	for (Jeu* ptrJeu : span(paireNomJeux_.second.elements, paireNomJeux_.second.nElements))
-		cout << ptrJeu->developpeur << endl;
+		cout << ptrJeu->titre << endl;
 }
 
 // Destructeur

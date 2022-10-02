@@ -276,22 +276,24 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     bibliotheque_cours::activerCouleursAnsi();
 #pragma endregion
 
-    // static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-    // ListeJeux listeJeux = creerListeJeux("jeux.bin");
+     static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
+     //ListeJeux listeJeux = creerListeJeux("jeux.bin");
 
-    // cout << ligneSeparation;
-    // cout << "Premier jeu de la liste :" << endl;
-    // afficherJeu(listeJeux.elements[0]);
-    // cout << ligneSeparation << endl;
+     //cout << ligneSeparation;
+     //cout << "Premier jeu de la liste :" << endl;
+     //afficherJeu(listeJeux.elements[0]);
+     //cout << ligneSeparation << endl;
 
-    // cout << "Affichage de la liste de jeu:\n" << endl;
-    // afficherListeJeux(listeJeux);
+     //cout << "Affichage de la liste de jeu:\n" << endl;
+     //afficherListeJeux(listeJeux);
 
-    // detruireListeJeux(listeJeux);
+     //detruireListeJeux(listeJeux);
 
-    // Tests sur les methodes des classes Developpeur et ListeDeveloppeurs
+     //Tests sur les methodes des classes Developpeur et ListeDeveloppeurs
     ListeJeux listeJeuxTests = creerListeJeux("jeux.bin");
 
+    cout << ligneSeparation;
+    cout << "Voici les tests des methodes des classes Developpeur et ListeDeveloppeurs: " << endl;
     Developpeur dev;
     cout << dev.obtenirNom() << endl;
 
@@ -299,7 +301,6 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     cout << square.obtenirNom() << endl;
     cout << square.compterNbJeux(listeJeuxTests) << endl; // Square a developpe 3 jeux
     square.mettreDeveloppeurAJour(listeJeuxTests);
-    square.test();
     square.afficherJeuxDeveloppes();
 
     detruireListeJeux(listeJeuxTests);
