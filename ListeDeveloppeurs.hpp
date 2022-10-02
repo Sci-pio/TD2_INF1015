@@ -34,6 +34,8 @@ ListeDeveloppeurs::ListeDeveloppeurs()
 
 void ListeDeveloppeurs::afficher() const
 {
+	cout << "--------------------------------------------------" << endl;
+	cout << "La ListeDeveloppeurs possède " << nElements_ << " développeur(s)" << endl;
 	for (Developpeur* developpeur : span(elements_, nElements_))
 		developpeur->afficherJeuxDeveloppes();
 }

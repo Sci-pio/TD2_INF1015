@@ -84,7 +84,8 @@ void Developpeur::afficherJeuxDeveloppes()
 	cout << "Les jeux développés par " << paireNomJeux_.first << " sont: " << endl;
 
 	for (Jeu* ptrJeu : span(paireNomJeux_.second.elements, paireNomJeux_.second.nElements))
-		cout << ptrJeu->titre << endl;
+		cout << "\t" << ptrJeu->titre << endl;
+	//cout << "\n";
 }
 
 

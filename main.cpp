@@ -90,11 +90,10 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 
     Concepteur* ptrConcepteur = chercherConcepteur(concepteur.nom, listeJeux);
 
-    if (ptrConcepteur == nullptr)
+    if (ptrConcepteur == nullptr) 
         ptrConcepteur = new Concepteur(concepteur);
 
-    cout << "L'allocation du concepteur est réussie." << endl;
-
+    cout << "L'allocation du concepteur " << ptrConcepteur->nom << " est réussie." << endl;
     return ptrConcepteur;
 }
 
@@ -167,6 +166,7 @@ Jeu* lireJeu(istream& fichier, const ListeJeux& listeJeux)
         ptrJeu->concepteurs.elements[i] = ptrConcepteur;
         ajouterJeu(ptrJeu, ptrConcepteur->jeuxConcus);
     }
+    cout << "L'allocation du jeu " << ptrJeu->titre << " est réussie." << endl;
     return ptrJeu;
 }
 
@@ -193,7 +193,7 @@ void detruireConcepteur(Concepteur* ptrConcepteur)
     delete[] ptrConcepteur->jeuxConcus.elements;
 }
 
-// Cette methode n'est pas uttilisé par les autres methodes; Nous avons procédé différemment pour concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur)
+// Cette methode n'est pas utilisée par les autres méthodes; Nous avons procédé différemment pour concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur)
 bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur)
 {
     bool estParticipantJeu = false;
@@ -278,46 +278,44 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 #pragma endregion
 
      static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-     //ListeJeux listeJeux = creerListeJeux("jeux.bin");
+     ListeJeux listeJeux = creerListeJeux("jeux.bin");
 
-     //cout << ligneSeparation;
-     //cout << "Premier jeu de la liste :" << endl;
-     //afficherJeu(listeJeux.elements[0]);
-     //cout << ligneSeparation << endl;
+     cout << ligneSeparation;
+     cout << "Premier jeu de la liste :" << endl;
+     afficherJeu(listeJeux.elements[0]);
+     cout << ligneSeparation << endl;
 
-     //cout << "Affichage de la liste de jeu:\n" << endl;
-     //afficherListeJeux(listeJeux);
+     cout << "Affichage de la liste de jeu:\n" << endl;
+     afficherListeJeux(listeJeux);
 
-     //detruireListeJeux(listeJeux);
 
      //Tests sur les methodes de la classe Developpeur
-    ListeJeux listeJeuxTests = creerListeJeux("jeux.bin");
-
     cout << ligneSeparation;
-    cout << "Voici les tests des methodes de la classe Developpeur: " << endl;
+    cout << "Tests des methodes de la classe Developpeur: " << endl;
     Developpeur dev;
     cout << dev.obtenirNom() << endl;
 
     Developpeur square("Square");
     cout << square.obtenirNom() << endl;
-    cout << square.compterNombreJeux(listeJeuxTests) << endl; // Square a developpe 3 jeux
-    square.mettreDeveloppeurAJour(listeJeuxTests);
+    cout << square.compterNombreJeux(listeJeux) << endl; // Square a developpe 3 jeux
+    square.mettreDeveloppeurAJour(listeJeux);
     square.afficherJeuxDeveloppes(); // Les jeux developpes par Square sont Chrono Trigger, Final Fantasy VI et Secret of Mana
 
-    Developpeur nintendo("Nintendo");
-    nintendo.mettreDeveloppeurAJour(listeJeuxTests);
-
     //Tests sur les methodes de la classe ListeDeveloppeurs
+    Developpeur nintendo("Nintendo");
+    nintendo.mettreDeveloppeurAJour(listeJeux);
+
     cout << ligneSeparation;
-    cout << "Voici les tests des methodes de la classe ListeDeveloppeurs: " << endl;
+    cout << "Tests des methodes de la classe ListeDeveloppeurs: " << endl;
     ListeDeveloppeurs listeDev;
-    listeDev.afficher(); //N'affiche rien
+    listeDev.afficher(); 
     listeDev.ajouterDeveloppeur(&square);
     listeDev.ajouterDeveloppeur(&nintendo);
     listeDev.afficher();
 
-    listeDev.retirerDeveloppeur(&nintendo);
+    listeDev.retirerDeveloppeur(&square);
     listeDev.afficher();
+    cout << ligneSeparation;
 
-    detruireListeJeux(listeJeuxTests);
+    detruireListeJeux(listeJeux);
 }
