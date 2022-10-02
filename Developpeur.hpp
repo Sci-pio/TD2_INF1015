@@ -22,6 +22,7 @@ public:
 	int compterNbJeux(const ListeJeux& listeJeux) const;
 	void mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux);
 	void afficherJeuxDeveloppes();
+	void test();
 	~Developpeur();
 
 private:
@@ -55,7 +56,7 @@ int Developpeur::compterNbJeux(const ListeJeux& listeJeux) const
 {
 	int nbJeux = 0;
 	for (Jeu* ptrJeu : span(listeJeux.elements, listeJeux.nElements)) {
-		if (ptrJeu->developpeur == this->obtenirNom())
+		if (ptrJeu->developpeur == obtenirNom())
 			nbJeux++;
 	}
 	return nbJeux;
@@ -68,20 +69,30 @@ void Developpeur::mettreDeveloppeurAJour(ListeJeux& listeTousLesJeux)
 	int index = 0;
 
 	delete[] paireNomJeux_.second.elements;
-	paireNomJeux_.second.elements = new Jeu * [tailleListeJeux];
+	paireNomJeux_.second.elements = new Jeu*[tailleListeJeux];
 
 	for (Jeu* ptrJeu : span(listeTousLesJeux.elements, listeTousLesJeux.nElements))
 		if (ptrJeu->developpeur == obtenirNom()) {
-			paireNomJeux_.second.elements[index++] = ptrJeu; // Leo: Warning pcq le compilateur a peur que l'index depasse la taille du tableau, mais normalement ca devrait etre correct (compterNbJeux)
+			paireNomJeux_.second.elements[index] = ptrJeu; // Leo: Warning pcq le compilateur a peur que l'index depasse la taille du tableau, mais normalement ca devrait etre correct (compterNbJeux)
+			index++;
 		}
+}
+
+//Kamil: fonction bidon temporaire
+void Developpeur::test()
+{
+	cout << paireNomJeux_.second.elements[0]->titre << endl;
+	cout << paireNomJeux_.second.elements[1]->titre << endl;
+	cout << paireNomJeux_.second.elements[2]->titre << endl;
 }
 
 // Fonction pour afficher les titres de tous les jeux developpes par un developpeur
 void Developpeur::afficherJeuxDeveloppes()
 {
-	cout << "Les jeux développés par " << paireNomJeux_.first << "sont: " << endl;
+	cout << "Les jeux développés par " << paireNomJeux_.first << " sont: " << endl;
+
 	for (Jeu* ptrJeu : span(paireNomJeux_.second.elements, paireNomJeux_.second.nElements))
-		cout << ptrJeu->titre << endl;
+		cout << ptrJeu->developpeur << endl;
 }
 
 // Destructeur
