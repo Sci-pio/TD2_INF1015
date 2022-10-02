@@ -1,6 +1,7 @@
 ﻿// Auteurs: Leonard Pouliot (2150965) et Kamil Maarite (2152653)
 // Date: 1 octobre 2022
 // cours: INF1015
+// Nom de la classe: Main.cpp
 
 #include "Jeu.hpp"
 #include <iostream>
@@ -192,7 +193,7 @@ void detruireConcepteur(Concepteur* ptrConcepteur)
     delete[] ptrConcepteur->jeuxConcus.elements;
 }
 
-
+// Cette methode n'est pas uttilisé par les autres methodes; Nous avons procédé différemment pour concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur)
 bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur)
 {
     bool estParticipantJeu = false;
@@ -299,7 +300,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 
     Developpeur square("Square");
     cout << square.obtenirNom() << endl;
-    cout << square.compterNbJeux(listeJeuxTests) << endl; // Square a developpe 3 jeux
+    cout << square.compterNombreJeux(listeJeuxTests) << endl; // Square a developpe 3 jeux
     square.mettreDeveloppeurAJour(listeJeuxTests);
     square.afficherJeuxDeveloppes();
 
