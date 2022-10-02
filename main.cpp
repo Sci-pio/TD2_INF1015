@@ -305,6 +305,7 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     square.afficherJeuxDeveloppes(); // Les jeux developpes par Square sont Chrono Trigger, Final Fantasy VI et Secret of Mana
 
     Developpeur nintendo("Nintendo");
+    nintendo.mettreDeveloppeurAJour(listeJeuxTests);
 
     //Tests sur les methodes de la classe ListeDeveloppeurs
     cout << ligneSeparation;
@@ -313,6 +314,9 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     listeDev.afficher(); //N'affiche rien
     listeDev.ajouterDeveloppeur(&square);
     listeDev.ajouterDeveloppeur(&nintendo);
+    listeDev.afficher();
+
+    listeDev.retirerDeveloppeur(&nintendo);
     listeDev.afficher();
 
     detruireListeJeux(listeJeuxTests);
