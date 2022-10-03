@@ -6,6 +6,6 @@ struct Jeu
 {
 	std::string titre;
 	int anneeSortie;
-	std::string developpeur; // Peut etre mettre un Developpeur developpeur?
+	std::string developpeur;
 	ListeConcepteurs concepteurs;
 };

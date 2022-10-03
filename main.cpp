@@ -11,7 +11,7 @@
 #include "gsl/span"
 #include "bibliotheque_cours.hpp"
 #include "verification_allocation.hpp"
-#include "debogage_memoire.hpp" 
+#include "debogage_memoire.hpp"
 #include "Developpeur.hpp"
 #include "ListeDeveloppeurs.hpp"
 
@@ -69,7 +69,8 @@ gsl::span<Concepteur*> spanListeConcepteurs(const ListeConcepteurs& liste)
 Concepteur* chercherConcepteur(const string& nomConcepteur, const ListeJeux& listeJeux)
 {
     Concepteur* ptrConcepteur = nullptr;
-    for (Jeu* ptrJeu : spanListeJeux(listeJeux)) {
+    for (Jeu* ptrJeu : spanListeJeux(listeJeux))
+    {
         for (Concepteur* tempPtrConcepteur : spanListeConcepteurs(ptrJeu->concepteurs))
         {
             if (tempPtrConcepteur->nom == nomConcepteur)
@@ -90,7 +91,7 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 
     Concepteur* ptrConcepteur = chercherConcepteur(concepteur.nom, listeJeux);
 
-    if (ptrConcepteur == nullptr) 
+    if (ptrConcepteur == nullptr)
         ptrConcepteur = new Concepteur(concepteur);
 
     cout << "L'allocation du concepteur " << ptrConcepteur->nom << " est réussie." << endl;
@@ -99,7 +100,7 @@ Concepteur* lireConcepteur(istream& fichier, const ListeJeux& listeJeux)
 
 void changerTailleListeJeux(size_t nouvelleCapacite, ListeJeux& listeJeux)
 {
-    Jeu** nouvelleListeJeux = new Jeu* [nouvelleCapacite];
+    Jeu** nouvelleListeJeux = new Jeu * [nouvelleCapacite];
 
     for (size_t i = 0; i < listeJeux.nElements; i++)
         nouvelleListeJeux[i] = listeJeux.elements[i];
@@ -115,7 +116,7 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
     bool estListePleine = listeJeux.capacite - 1 <= listeJeux.nElements;
     bool estListeNouvelle = listeJeux.capacite == 0;
 
-    if (estListePleine || estListeNouvelle )
+    if (estListePleine || estListeNouvelle)
     {
         size_t nouvelleCapacite = estListeNouvelle ? listeJeux.capacite = 1 : listeJeux.capacite * 2;
         changerTailleListeJeux(nouvelleCapacite, listeJeux);
@@ -128,16 +129,16 @@ void ajouterJeu(Jeu* jeu, ListeJeux& listeJeux)
 void enleveJeuListe(Jeu* ptrJeu, ListeJeux& listeJeux)
 {
     int indexJeu = -1;
-    int nElements = listeJeux.nElements;
+    size_t nElements = listeJeux.nElements;
 
-    for (size_t i = 0; i < nElements; i++)
+    for (int i = 0; i < nElements; i++)
     {
         if (listeJeux.elements[i] == ptrJeu)
             indexJeu = i;
     }
 
     bool estJeuPresent = indexJeu != -1;
-    bool estListeVide = nElements  <= 0;
+    bool estListeVide = nElements <= 0;
 
     if (estJeuPresent && !estListeVide)
     {
@@ -186,7 +187,6 @@ ListeJeux creerListeJeux(const string& nomFichier)
     return listeJeux;
 }
 
-
 void detruireConcepteur(Concepteur* ptrConcepteur)
 {
     cout << "Le pointeur du concepteur " << ptrConcepteur->nom << "a été detruit" << endl;
@@ -203,7 +203,6 @@ bool concepteurParticipeJeu(Jeu* ptrJeu, Concepteur* ptrConcepteur)
 
     return estParticipantJeu;
 }
-
 
 void detruirejeu(Jeu* ptrJeu, ListeJeux& listeJeu)
 {
@@ -224,7 +223,6 @@ void detruirejeu(Jeu* ptrJeu, ListeJeux& listeJeu)
     cout << "Le pointeur du jeu " << ptrJeu->titre << " a été détruit." << endl;
     delete[] ptrJeu->concepteurs.elements;
 }
-
 
 void detruireListeJeux(ListeJeux& listeJeux)
 {
@@ -271,25 +269,24 @@ void afficherListeJeux(const ListeJeux& listeJeux)
 int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
 {
 #pragma region "Bibliothèque du cours"
-    // Permet sous Windows les "ANSI escape code" pour changer de couleur
-    // https://en.wikipedia.org/wiki/ANSI_escape_code ; les consoles Linux/Mac
-    // les supportent normalement par défaut.
     bibliotheque_cours::activerCouleursAnsi();
 #pragma endregion
 
-     static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
-     ListeJeux listeJeux = creerListeJeux("jeux.bin");
+    static const string ligneSeparation = "\n\033[35m════════════════════════════════════════\033[0m\n";
+    ListeJeux listeJeux = creerListeJeux("jeux.bin");
 
-     cout << ligneSeparation;
-     cout << "Premier jeu de la liste :" << endl;
-     afficherJeu(listeJeux.elements[0]);
-     cout << ligneSeparation << endl;
+    // Tests pour les fonctions du main
+    cout << ligneSeparation;
+    cout << "Premier jeu de la liste :" << endl;
+    afficherJeu(listeJeux.elements[0]);
+    cout << ligneSeparation << endl;
 
-     cout << "Affichage de la liste de jeu:\n" << endl;
-     afficherListeJeux(listeJeux);
+	cout << "Affichage de la liste de jeu:\n" << endl;
+	afficherListeJeux(listeJeux);
+    concepteurParticipeJeu(listeJeux.elements[0], listeJeux.elements[0]->concepteurs.elements[0]); // Appel pour la couverture de code (Pas veritablement uttilise)
 
 
-     //Tests sur les methodes de la classe Developpeur
+    // Tests sur les methodes de la classe Developpeur
     cout << ligneSeparation;
     cout << "Tests des methodes de la classe Developpeur: " << endl;
     Developpeur dev;
@@ -301,14 +298,15 @@ int main([[maybe_unused]] int argc, [[maybe_unused]] char** argv)
     square.mettreDeveloppeurAJour(listeJeux);
     square.afficherJeuxDeveloppes(); // Les jeux developpes par Square sont Chrono Trigger, Final Fantasy VI et Secret of Mana
 
-    //Tests sur les methodes de la classe ListeDeveloppeurs
+
+    // Tests sur les methodes de la classe ListeDeveloppeurs
     Developpeur nintendo("Nintendo");
     nintendo.mettreDeveloppeurAJour(listeJeux);
 
     cout << ligneSeparation;
     cout << "Tests des methodes de la classe ListeDeveloppeurs: " << endl;
     ListeDeveloppeurs listeDev;
-    listeDev.afficher(); 
+    listeDev.afficher();
     listeDev.ajouterDeveloppeur(&square);
     listeDev.ajouterDeveloppeur(&nintendo);
     listeDev.afficher();
